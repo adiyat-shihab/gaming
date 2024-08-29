@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Progress } from "@/components/ui/progress";
 import {
   Star,
   Calendar,
@@ -245,13 +244,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <h3 className="text-xl font-semibold mb-2">Screenshots</h3>
                 <ScrollArea className="w-full whitespace-nowrap rounded-md mb-6">
                   <div className="flex space-x-4 pb-4">
-                    {games.screenshots.map((screenshot, index) => (
+                    {games.screenshots.map((screenshot: any, index: number) => (
                       <Card key={index} className="w-[300px] shrink-0">
                         <CardContent className="p-0">
-                          <img
+                          <Image
                             src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
                             alt={`Screenshot ${index + 1}`}
                             className="w-full h-auto rounded-lg"
+                            width={500}
+                            height={500}
                           />
                         </CardContent>
                       </Card>
