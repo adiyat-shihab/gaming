@@ -245,7 +245,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <ScrollArea className="w-full whitespace-nowrap rounded-md mb-6">
                   <div className="flex space-x-4 pb-4">
                     {games.screenshots.map((screenshot: any, index: number) => (
-                      <Card key={index} className="w-[300px] shrink-0">
+                      <Card
+                        key={index}
+                        className="w-[300px] border-none shrink-0"
+                      >
                         <CardContent className="p-0">
                           <Image
                             src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
