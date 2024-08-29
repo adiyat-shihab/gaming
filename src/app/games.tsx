@@ -66,13 +66,14 @@ export default async function SteamLikeHome() {
     },
     method: "POST",
     body: `
-      fields name, release_dates.date, hypes, cover.image_id, cover.url;
+      fields id,  name, release_dates.date, hypes, cover.image_id, cover.url, slug;
       where  release_dates.date <= ${currentDate} & hypes > 60; 
       sort release_dates.date desc; 
       limit 48;
     `,
   });
   const recentlyReleasedResult = await recentlyReleased.json();
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Navbar */}
@@ -137,163 +138,39 @@ export default async function SteamLikeHome() {
       <main className="container mx-auto px-4 py-8 flex-grow">
         <section className="">
           <h2 className="text-xl md:text-2xl font-semibold mb-4">All Games</h2>
-          <div className={"grid-cols-6 grid gap-y-4"}>
+          <div
+            className={
+              "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mx-auto grid gap-y-4"
+            }
+          >
             {recentlyReleasedResult.map((game: any) => (
               <Card
                 key={game.id}
                 className="w-[120px] sm:w-[220px] sm:h-[350px] "
               >
-                <CardContent className="p-0 -mt-2 ">
-                  {game?.cover?.url && (
-                    <Image
-                      src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game?.cover?.image_id}.png`}
-                      alt={game.name}
-                      className="w-full h-[160px] sm:h-[300px] object-contain  rounded-t-lg"
-                      width={500}
-                      height={500}
-                    />
-                  )}
-                </CardContent>
-                <CardFooter className="p-2">
-                  <p className="text-xs  sm:text-sm font-medium truncate">
-                    {game.name}
-                  </p>
-                </CardFooter>
+                <Link href={`/${game.id}`}>
+                  <CardContent className="p-0 ">
+                    {game?.cover?.url && (
+                      <Image
+                        src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game?.cover?.image_id}.webp`}
+                        alt={game.name}
+                        className="w-full h-[160px] sm:h-[300px] object-contain rounded rounded-t-xl -mt-[0.3rem]"
+                        width={500}
+                        height={500}
+                      />
+                    )}
+                  </CardContent>
+                  <CardFooter className="p-2">
+                    <p className="text-xs  sm:text-sm font-medium truncate">
+                      {game.name}
+                    </p>
+                  </CardFooter>
+                </Link>
               </Card>
             ))}
           </div>
         </section>
       </main>
-      <footer className="bg-card mt-8">
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">About GameHub</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Press Center
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Help Center
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Community
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Code of Conduct
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-              <div className="flex space-x-4">
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <Facebook size={24} />
-                  <span className="sr-only">Facebook</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <Twitter size={24} />
-                  <span className="sr-only">Twitter</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <Instagram size={24} />
-                  <span className="sr-only">Instagram</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  <Youtube size={24} />
-                  <span className="sr-only">YouTube</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <Separator className="my-8" />
-          <div className="text-center text-sm text-muted-foreground">
-            <p>&copy; 2023 GameHub. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
