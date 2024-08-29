@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import GamesCarousel from "@/components/GamesCarousel";
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Suspense } from "react";
+import Loading from "@/lib/loading";
 
 export default async function SteamLikeHome() {
   const twitchToken = await fetch(
@@ -134,43 +136,46 @@ export default async function SteamLikeHome() {
       {/*  gamesResults={await recentlyReleased.json()}*/}
       {/*/>*/}
 
-      {/* Footer */}
-      <main className="container mx-auto px-4 py-8 flex-grow">
-        <section className="">
-          <h2 className="text-xl md:text-2xl font-semibold mb-4">All Games</h2>
-          <div
-            className={
-              "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mx-auto grid gap-y-4"
-            }
-          >
-            {recentlyReleasedResult.map((game: any) => (
-              <Card
-                key={game.id}
-                className="w-[120px] sm:w-[220px] sm:h-[350px] "
-              >
-                <Link href={`/${game.id}`}>
-                  <CardContent className="p-0 ">
-                    {game?.cover?.url && (
-                      <Image
-                        src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game?.cover?.image_id}.webp`}
-                        alt={game.name}
-                        className="w-full h-[160px] sm:h-[300px] object-contain rounded rounded-t-xl -mt-[0.3rem]"
-                        width={500}
-                        height={500}
-                      />
-                    )}
-                  </CardContent>
-                  <CardFooter className="p-2">
-                    <p className="text-xs  sm:text-sm font-medium truncate">
-                      {game.name}
-                    </p>
-                  </CardFooter>
-                </Link>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </main>
+      <Suspense fallback={<Loading />}>
+        <main className="container mx-auto px-4 py-8 flex-grow">
+          <section className="">
+            <h2 className="text-xl md:text-2xl font-semibold mb-4">
+              All Games
+            </h2>
+            <div
+              className={
+                "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mx-auto grid gap-y-4"
+              }
+            >
+              {recentlyReleasedResult.map((game: any) => (
+                <Card
+                  key={game.id}
+                  className="w-[120px] sm:w-[220px] sm:h-[350px] "
+                >
+                  <Link href={`/${game.id}`}>
+                    <CardContent className="p-0 ">
+                      {game?.cover?.url && (
+                        <Image
+                          src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game?.cover?.image_id}.webp`}
+                          alt={game.name}
+                          className="w-full h-[160px] sm:h-[300px] object-contain rounded rounded-t-xl -mt-[0.3rem]"
+                          width={500}
+                          height={500}
+                        />
+                      )}
+                    </CardContent>
+                    <CardFooter className="p-2">
+                      <p className="text-xs  sm:text-sm font-medium truncate">
+                        {game.name}
+                      </p>
+                    </CardFooter>
+                  </Link>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </main>
+      </Suspense>
     </div>
   );
 }
