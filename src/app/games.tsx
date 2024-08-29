@@ -30,7 +30,7 @@ export default async function SteamLikeHome() {
   const result = await twitchToken.json();
   const fetchGames = await fetch("https://api.igdb.com/v4/games", {
     headers: {
-      "Client-ID": process.env.TWITCH_CLIENT_ID,
+      "Client-ID": process.env.TWITCH_CLIENT_ID ?? "",
       Authorization: `Bearer ${result?.access_token}`,
     },
     method: "POST",
@@ -45,7 +45,7 @@ export default async function SteamLikeHome() {
 
   const comingSoon = await fetch("https://api.igdb.com/v4/games", {
     headers: {
-      "Client-ID": process.env.TWITCH_CLIENT_ID,
+      "Client-ID": process.env.TWITCH_CLIENT_ID ?? "",
       Authorization: `Bearer ${result?.access_token}`,
     },
     method: "POST",
@@ -61,7 +61,7 @@ export default async function SteamLikeHome() {
   const oneMonthAgo = currentDate - 180 * 24 * 60 * 60; // Unix timestamp for 30 days ago
   const recentlyReleased = await fetch("https://api.igdb.com/v4/games", {
     headers: {
-      "Client-ID": process.env.TWITCH_CLIENT_ID,
+      "Client-ID": process.env.TWITCH_CLIENT_ID ?? "",
       Authorization: `Bearer ${result?.access_token}`,
     },
     method: "POST",
