@@ -16,6 +16,18 @@ const config = {
         body: ["var(--font-body)", ...fontFamily.sans],
       },
       colors: {
+        rating: {
+          1: "#db303b",
+          2: "#db303b",
+          3: "#df4751",
+          4: "#df4751",
+          5: "#5369a2",
+          6: "#5369a2",
+          7: "#1d8acd",
+          8: "#2fc482",
+          9: "#249563",
+          10: "#249563",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

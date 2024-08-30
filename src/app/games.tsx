@@ -1,22 +1,9 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  Search,
-  User,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Menu,
-} from "lucide-react";
-import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import GamesCarousel from "@/components/GamesCarousel";
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Suspense } from "react";
-import Loading from "@/lib/loading";
+import Loading from "@/app/loading";
+import Link from "next/link";
 
 export default async function SteamLikeHome() {
   const twitchToken = await fetch(
@@ -60,7 +47,6 @@ export default async function SteamLikeHome() {
   });
   const comingSoonResult = await comingSoon.json();
   const currentDate = Math.floor(Date.now() / 1000);
-  const oneMonthAgo = currentDate - 180 * 24 * 60 * 60; // Unix timestamp for 30 days ago
   const recentlyReleased = await fetch("https://api.igdb.com/v4/games", {
     headers: {
       "Client-ID": process.env.TWITCH_CLIENT_ID ?? "",
@@ -79,53 +65,6 @@ export default async function SteamLikeHome() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Navbar */}
-      <nav className="sticky top-0 z-10 flex items-center justify-between p-4 bg-card">
-        <div className="flex items-center space-x-4">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <nav className="flex flex-col space-y-4">
-                <Link href="#" className="text-lg font-medium hover:underline">
-                  Store
-                </Link>
-                <Link href="#" className="text-lg font-medium hover:underline">
-                  Community
-                </Link>
-                <Link href="#" className="text-lg font-medium hover:underline">
-                  About
-                </Link>
-                <Link href="#" className="text-lg font-medium hover:underline">
-                  Support
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <h1 className="text-xl md:text-2xl font-bold">GameHub</h1>
-        </div>
-        <div className="hidden md:flex items-center space-x-4 flex-grow max-w-md mx-4">
-          <Input
-            type="search"
-            placeholder="Search games..."
-            className="pl-10"
-          />
-          <Search className="absolute ml-3 text-muted-foreground" size={18} />
-        </div>
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
-          </Button>
-          <Button variant="ghost" size="icon">
-            <User className="h-5 w-5" />
-            <span className="sr-only">User profile</span>
-          </Button>
-        </div>
-      </nav>
 
       {/* Main content */}
       <GamesCarousel heading={"Most Anticipated"} gamesResults={gamesResult} />

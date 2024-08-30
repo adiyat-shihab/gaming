@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { log } from "node:util";
 export default async function Page({ params }: { params: { id: string } }) {
   const game = {
     title: "Cyberpunk 2077",
@@ -70,7 +71,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     },
     method: "POST",
     body: `
-      fields *, screenshots.*, cover.*, first_release_date, involved_companies.company.*;
+      fields *, screenshots.*, cover.*, first_release_date, involved_companies.company.*, genres.name, genres.id, platforms.name, platforms.id;
       where  id = ${params.id}; 
     `,
   });
@@ -78,6 +79,30 @@ export default async function Page({ params }: { params: { id: string } }) {
   const games = gameJson[0];
   const releaseDate = new Date(games.first_release_date * 1000).toDateString();
   console.log(games);
+  const ratingColor = {
+    1: "bg-rating-1",
+    2: "bg-rating-2",
+    3: "bg-rating-3",
+    4: "bg-rating-4",
+    5: "bg-rating-5",
+    6: "bg-rating-6",
+    7: "bg-rating-7",
+    8: "bg-rating-8",
+    9: "bg-rating-9",
+    10: "bg-rating1-10",
+  };
+  const ratingScore = {
+    1: "Unbearable",
+    2: "Painful",
+    3: "Awful",
+    4: "Bad",
+    5: "Mediocre",
+    6: "Okay",
+    7: "Good",
+    8: "Great",
+    9: "Amazing",
+    10: "Masterpiece",
+  };
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="bg-card ">
@@ -86,7 +111,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className={`container mx-auto px-4 py-8 ${games || "hidden"} `}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Card>
@@ -114,27 +139,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </div>
                   </div>
                   <Separator className="my-4" />
-                  {/*<Button*/}
-                  {/*    className="w-full mb-2"*/}
-                  {/*    variant={gameStatus === 'Want to play' ? 'default' : 'outline'}*/}
-                  {/*    onClick={() => handleStatusChange('Want to play')}*/}
-                  {/*>*/}
-                  {/*  Want to play*/}
-                  {/*</Button>*/}
-                  {/*<Button*/}
-                  {/*    className="w-full mb-2"*/}
-                  {/*    variant={gameStatus === 'Playing' ? 'default' : 'outline'}*/}
-                  {/*    onClick={() => handleStatusChange('Playing')}*/}
-                  {/*>*/}
-                  {/*  Playing*/}
-                  {/*</Button>*/}
-                  {/*<Button*/}
-                  {/*    className="w-full"*/}
-                  {/*    variant={gameStatus === 'Played' ? 'default' : 'outline'}*/}
-                  {/*    onClick={() => handleStatusChange('Played')}*/}
-                  {/*>*/}
-                  {/*  Played*/}
-                  {/*</Button>*/}
                   <Select>
                     <SelectTrigger className={"  "}>
                       <SelectValue placeholder="Theme" />
@@ -159,7 +163,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
               <TabsContent value="about">
                 <h2 className="text-2xl font-semibold mb-4">About</h2>
-                <p className="text-muted-foreground mb-6">{games.storyline}</p>
+                <p className="text-muted-foreground mb-6 ">{games.summary}</p>
 
                 <h3 className="text-xl font-semibold mb-2">Information</h3>
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -196,47 +200,71 @@ export default async function Page({ params }: { params: { id: string } }) {
                       <div className="text-sm text-muted-foreground">
                         Genres
                       </div>
-                      <div>{game.genres.join(", ")}</div>
+                      <div>
+                        {games.genres
+                          .map(
+                            (game: { id: number; name: string }) => game.name,
+                          )
+                          .join(", ")}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <h3 className="text-xl font-semibold mb-2">Platforms</h3>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {game.platforms.map((platform, index) => (
-                    <Badge key={index} variant="secondary">
-                      <Monitor className="w-4 h-4 mr-1" />
-                      {platform}
-                    </Badge>
-                  ))}
+                  {games.platforms.map(
+                    (platform: { id: number; name: string }) => (
+                      <Badge key={platform.id} variant="secondary">
+                        <Monitor className="w-4 h-4 mr-1" />
+                        {platform.name}
+                      </Badge>
+                    ),
+                  )}
                 </div>
 
                 <h3 className="text-xl font-semibold mb-2">Critic Score</h3>
                 <div className="flex items-center mb-6">
-                  <div className="bg-green-500 text-white font-bold rounded-full w-12 h-12 flex items-center justify-center mr-4">
-                    {game.criticScore}
+                  <div
+                    className={` ${ratingColor[Math.floor(games.aggregated_rating / 10) as keyof typeof ratingColor]} text-white font-bold rounded-full w-12 h-12 flex items-center justify-center mr-4`}
+                  >
+                    {games.aggregated_rating?.toFixed(1)}
                   </div>
                   <div>
                     <div className="font-semibold">
-                      Generally favorable reviews
+                      {
+                        ratingScore[
+                          Math.floor(
+                            games.aggregated_rating / 10,
+                          ) as keyof typeof ratingScore
+                        ]
+                      }
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      based on 93 Critic Reviews
+                      based on {games.aggregated_rating_count} Critic Reviews
                     </div>
                   </div>
                 </div>
 
                 <h3 className="text-xl font-semibold mb-2">User Score</h3>
                 <div className="flex items-center mb-6">
-                  <div className="bg-yellow-500 text-white font-bold rounded-full w-12 h-12 flex items-center justify-center mr-4">
-                    {game.userScore}
+                  <div
+                    className={` text-white font-bold ${ratingColor[Math.floor(games.total_rating / 10) as keyof typeof ratingColor]} rounded-full w-12 h-12 flex items-center justify-center mr-4`}
+                  >
+                    {games.total_rating?.toFixed(1)}
                   </div>
                   <div>
                     <div className="font-semibold">
-                      Mixed or average reviews
+                      {
+                        ratingScore[
+                          Math.floor(
+                            games.total_rating / 10,
+                          ) as keyof typeof ratingScore
+                        ]
+                      }
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      based on 26733 Ratings
+                      based on {games.total_rating_count} Ratings
                     </div>
                   </div>
                 </div>
@@ -310,31 +338,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
       </main>
-
-      <footer className="bg-card mt-12">
-        <div className="container mx-auto px-4 py-6">
-          <Separator className="mb-6" />
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-              © 2023 GameHub. All rights reserved.
-            </p>
-            <div className="flex space-x-4">
-              <Button variant="ghost" size="sm">
-                <ThumbsUp className="w-4 h-4 mr-2" />
-                Like
-              </Button>
-              <Button variant="ghost" size="sm">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Comment
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
