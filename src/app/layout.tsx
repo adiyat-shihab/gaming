@@ -86,6 +86,9 @@ export default function RootLayout({
               <Search className="h-5 w-5" />
               <span className="sr-only">Search</span>
             </Button>
+            <Link href={"/Login"}>
+              <Button variant="secondary">Login</Button>
+            </Link>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
               <span className="sr-only">User profile</span>

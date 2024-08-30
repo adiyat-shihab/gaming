@@ -25,6 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { log } from "node:util";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 export default async function Page({ params }: { params: { id: string } }) {
   const game = {
     title: "Cyberpunk 2077",
@@ -270,26 +275,31 @@ export default async function Page({ params }: { params: { id: string } }) {
                 </div>
 
                 <h3 className="text-xl font-semibold mb-2">Screenshots</h3>
-                <ScrollArea className="w-full whitespace-nowrap rounded-md mb-6">
-                  <div className="flex space-x-4 pb-4">
+                <Carousel
+                  opts={{
+                    align: "start",
+                    dragFree: true,
+                  }}
+                  className="w-full whitespace-nowrap  rounded-md mb-6"
+                >
+                  <CarouselContent className=" gap-10">
                     {games.screenshots.map((screenshot: any, index: number) => (
-                      <Card
-                        key={index}
-                        className="w-[300px] border-none shrink-0"
-                      >
-                        <CardContent className="p-0">
-                          <Image
-                            src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
-                            alt={`Screenshot ${index + 1}`}
-                            className="w-full h-auto rounded-lg"
-                            width={500}
-                            height={500}
-                          />
-                        </CardContent>
-                      </Card>
+                      <CarouselItem key={index} className={"basis-1/4"}>
+                        <Card className="w-[300px] border-none shrink-0">
+                          <CardContent className="p-0">
+                            <Image
+                              src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
+                              alt={`Screenshot ${index + 1}`}
+                              className="w-full h-auto rounded-lg"
+                              width={500}
+                              height={500}
+                            />
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
                     ))}
-                  </div>
-                </ScrollArea>
+                  </CarouselContent>
+                </Carousel>
               </TabsContent>
 
               <TabsContent value="info">
