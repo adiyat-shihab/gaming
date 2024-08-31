@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                       <div className="text-sm text-muted-foreground">
                         Developer
                       </div>
-                      <div>{games.involved_companies.pop().company.name}</div>
+                      <div>{games.involved_companies?.pop().company.name}</div>
                     </div>
                   </div>
                   <div className="flex items-center">
@@ -207,7 +207,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                       </div>
                       <div>
                         {games.genres
-                          .map(
+                          ?.map(
                             (game: { id: number; name: string }) => game.name,
                           )
                           .join(", ")}
@@ -218,7 +218,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                 <h3 className="text-xl font-semibold mb-2">Platforms</h3>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {games.platforms.map(
+                  {games.platforms?.map(
                     (platform: { id: number; name: string }) => (
                       <Badge key={platform.id} variant="secondary">
                         <Monitor className="w-4 h-4 mr-1" />
@@ -283,21 +283,23 @@ export default async function Page({ params }: { params: { id: string } }) {
                   className="w-full whitespace-nowrap  rounded-md mb-6"
                 >
                   <CarouselContent className=" gap-10">
-                    {games.screenshots.map((screenshot: any, index: number) => (
-                      <CarouselItem key={index} className={"basis-1/4"}>
-                        <Card className="w-[300px] border-none shrink-0">
-                          <CardContent className="p-0">
-                            <Image
-                              src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
-                              alt={`Screenshot ${index + 1}`}
-                              className="w-full h-auto rounded-lg"
-                              width={500}
-                              height={500}
-                            />
-                          </CardContent>
-                        </Card>
-                      </CarouselItem>
-                    ))}
+                    {games.screenshots?.map(
+                      (screenshot: any, index: number) => (
+                        <CarouselItem key={index} className={"basis-1/4"}>
+                          <Card className="w-[300px] border-none shrink-0">
+                            <CardContent className="p-0">
+                              <Image
+                                src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${screenshot.image_id}.webp`}
+                                alt={`Screenshot ${index + 1}`}
+                                className="w-full h-auto rounded-lg"
+                                width={500}
+                                height={500}
+                              />
+                            </CardContent>
+                          </Card>
+                        </CarouselItem>
+                      ),
+                    )}
                   </CarouselContent>
                 </Carousel>
               </TabsContent>
@@ -307,7 +309,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                 <h3 className="text-xl font-semibold mb-2">Genres</h3>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {game.genres.map((genre, index) => (
+                  {game.genres?.map((genre, index) => (
                     <Badge key={index} variant="secondary">
                       {genre}
                     </Badge>
@@ -316,7 +318,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                 <h3 className="text-xl font-semibold mb-2">Themes</h3>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {game.themes.map((theme, index) => (
+                  {game.themes?.map((theme, index) => (
                     <Badge key={index} variant="outline">
                       {theme}
                     </Badge>
@@ -325,7 +327,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                 <h3 className="text-xl font-semibold mb-2">Platforms</h3>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {game.platforms.map((platform, index) => (
+                  {game.platforms?.map((platform, index) => (
                     <Badge key={index} variant="secondary">
                       <Monitor className="w-4 h-4 mr-1" />
                       {platform}

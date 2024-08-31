@@ -5,10 +5,14 @@ import { Menu, Search, User } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useUserSession } from "@/hooks/use-user-session";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const user = useUserSession(null);
-  console.log(user);
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+  console.log(search);
   return (
     <nav className="sticky top-0 z-10 flex items-center justify-between drop-shadow p-4 bg-card">
       <div className="flex items-center space-x-4">
@@ -41,7 +45,15 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="hidden md:flex items-center space-x-4 flex-grow max-w-md mx-4">
-        <Input type="search" placeholder="Search games..." className="pl-10" />
+        <Input
+          type="search"
+          placeholder="Search games..."
+          className="pl-10"
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            e.key === "Enter" && router.push(`/search/game/${search}`);
+          }}
+        />
         <Search className="absolute ml-3 text-muted-foreground" size={18} />
       </div>
       <div className="flex items-center space-x-4">
