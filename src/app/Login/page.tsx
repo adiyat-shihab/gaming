@@ -153,6 +153,7 @@ const Page = () => {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
+                      {/* eslint-disable-next-line react/no-unescaped-entities */}
                       <AlertDialogTitle>Account doesn't exist</AlertDialogTitle>
                       <AlertDialogDescription>
                         Something went wrong. Please check your email or
