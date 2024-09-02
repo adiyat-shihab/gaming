@@ -5,14 +5,20 @@ import { Menu, Search, User } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useUserSession } from "@/hooks/use-user-session";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import signout from "@/firebase/signOut";
+import { createSession, removeSession } from "@/actions/auth-actions";
 
 const Navbar = () => {
   const user = useUserSession(null);
+  console.log(user);
+
   const [search, setSearch] = useState("");
   const router = useRouter();
   console.log(search);
+  // @ts-ignore
+  // @ts-ignore
   return (
     <nav className="sticky top-0 z-10 flex items-center justify-between drop-shadow p-4 bg-card">
       <div className="flex items-center space-x-4">
@@ -66,10 +72,21 @@ const Navbar = () => {
             <Button variant="secondary">Login</Button>
           </Link>
         ) : (
-          <Button variant="ghost" size="icon">
-            <User className="h-5 w-5" />
-            <span className="sr-only">User profile</span>
-          </Button>
+          <div className={"flex items-center gap-2"}>
+            <Link href={`/profile/${user?.displayName}`}>
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+                <span className="sr-only">User profile</span>
+              </Button>
+            </Link>
+            <Button
+              onClick={() => signout()}
+              variant="ghost"
+              className={"border"}
+            >
+              Logout
+            </Button>
+          </div>
         )}
       </div>
     </nav>

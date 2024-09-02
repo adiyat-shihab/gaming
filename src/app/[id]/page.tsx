@@ -24,12 +24,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { log } from "node:util";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Status from "@/components/Status";
 export default async function Page({ params }: { params: { id: string } }) {
   const game = {
     title: "Cyberpunk 2077",
@@ -83,7 +83,6 @@ export default async function Page({ params }: { params: { id: string } }) {
   const gameJson = await gameData.json();
   const games = gameJson[0];
   const releaseDate = new Date(games.first_release_date * 1000).toDateString();
-  console.log(games);
   const ratingColor = {
     1: "bg-rating-1",
     2: "bg-rating-2",
@@ -108,6 +107,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     9: "Amazing",
     10: "Masterpiece",
   };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="bg-card ">
@@ -144,16 +144,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </div>
                   </div>
                   <Separator className="my-4" />
-                  <Select>
-                    <SelectTrigger className={"  "}>
-                      <SelectValue placeholder="Theme" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Status slug={games.slug} />
                 </div>
               </CardContent>
             </Card>
