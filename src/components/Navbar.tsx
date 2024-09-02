@@ -73,6 +73,7 @@ const Navbar = () => {
           </Link>
         ) : (
           <div className={"flex items-center gap-2"}>
+            {/*@ts-ignore*/}
             <Link href={`/profile/${user?.displayName}`}>
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />

@@ -54,6 +54,7 @@ const Status = ({ slug }: { slug: string }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          // @ts-ignore
           email: user.email,
           slug: slug,
           status: value,
